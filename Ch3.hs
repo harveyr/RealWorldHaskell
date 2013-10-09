@@ -1,8 +1,8 @@
 
--- Defining new data type.
--- ActorInfo is "type constructor."
--- Actor is "value constructor."
--- Subsequent types are "components" of the type.
+-- Defining new data type
+-- ActorInfo is "type constructor"
+-- Actor is "value constructor"
+-- Subsequent types are "components" of the type
 data ActorInfo = Actor Int String [String]
                  deriving (Show)
 
@@ -24,7 +24,7 @@ type Incident = (ActorStalker, Timestamp)  -- Synonym for tuple
 -------------------------------------------------------------------------------
 -- "Algebraic data types" can have more than one value constructor.
 -- E.g., Bools:
-data Bool = False | True
+--data Bool = False | True
 
 -- ... each value constructor can take 0 or more arguments.
 -- CreditCard, CashOnDelivery, and Invoice (below) are value constructors
@@ -63,8 +63,45 @@ sumList []     = 0
 -- ':' is the "cons" list constructor: http://book.realworldhaskell.org/read/getting-started.html#starting.list.op
 -- Note that the standard function "sum" already does this
 
+third (a, b, c) = c
+
+complicated (True, a, x:xs, 5) = (a, xs)
+-- (True must match exactly in this one)
+
+stalkerName (Stalker id name actor) = name
+
+-- wild card
+stalkerId (Stalker id _ _) = id
+
+-- wild card as default case
+summySum (x:xs) = x + summySum xs
+summySum _      = 0 
+
+
+-------------------------------------------------------------------------------
+-- Record syntax. Down with boilerplate.
+
+data AltStalker = AltStalker {
+      altStalkerName     :: String
+    , altStalkerHabits   :: [String]
+} deriving (Show)
+
+johnnyLurker = AltStalker "Johnny Lurker" ["Lurking"]
+
+-- verbose creation
+billyPeeper = AltStalker {
+      altStalkerName = "Billy Peeper"
+    , altStalkerHabits = ["Peeping"]
+}
 
 main = do
     putStrLn "Compiled!"
     print billyZane
+    
     print (sumList [1, 2, 3, 4])
+    print (third (1, 2, 3))
+
+    print johnnyLurker
+    print (altStalkerHabits johnnyLurker)
+    print (altStalkerHabits billyPeeper)
+
