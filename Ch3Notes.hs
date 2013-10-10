@@ -94,14 +94,75 @@ billyPeeper = AltStalker {
     , altStalkerHabits = ["Peeping"]
 }
 
+
+-------------------------------------------------------------------------------
+-- Error reporting
+
+maybeSecond :: [a] -> Maybe a
+-- matches only if list is at least two elements long:
+maybeSecond (_:x:_) = Just x
+maybeSecond _       = Nothing
+
+
+-------------------------------------------------------------------------------
+-- Local variables
+
+hugeOnion diameter = let hugeThreshold = 25
+                     in if diameter < hugeThreshold
+                        then False
+                        else True
+
+-- where clause
+possiblePizza size toppings = if (size * toppings) < materialsOnHand
+                              then True
+                              else False
+     where materialsOnHand  = 100
+
+
+-- local function referencing variable from enclosing scope
+pluralize :: String -> [Int] -> [String]
+pluralize word counts = map plural counts
+       where plural 0 = "no " ++ word ++ "s"
+             plural 1 = "one " ++ word
+             plural n = show n ++ " " ++ word ++ "s"
+
+
+
+-------------------------------------------------------------------------------
+-- Guards
+
+hugeOnionGuard diameter
+    | diameter < hugeThreshold = False
+    | otherwise                = True
+    where hugeThreshold = 25
+
 main = do
     putStrLn "Compiled!"
     print billyZane
+    putStrLn "---"
     
     print (sumList [1, 2, 3, 4])
     print (third (1, 2, 3))
+    putStrLn "---"
 
     print johnnyLurker
     print (altStalkerHabits johnnyLurker)
     print (altStalkerHabits billyPeeper)
+    putStrLn "---"
+    
 
+    print(hugeOnion 20)
+    print(hugeOnion 30)
+    putStrLn "---"
+
+    print(possiblePizza 10 5)
+    print(possiblePizza 18 10)
+    putStrLn "---"
+
+    print(pluralize "bingo" [1, 2, 3])
+    putStrLn "---"
+
+    putStrLn "hugeOnionGuard:"    
+    print(hugeOnionGuard 15)
+    print(hugeOnionGuard 25)
+    putStrLn "---"
