@@ -37,14 +37,27 @@ testPalindromify = do
 
 
 -- Write a function that determines whether its input list is a palindrome.
+-- ('Eq a' constraint requires arguments that can be compared with ==.
+-- Without it, the compiler will complain about the guard with ==.)
+isZeePalindrome :: Eq a => [a] -> Bool
+isZeePalindrome (x:xs)
+    | null xs        = True
+    | null (tail xs) = (x == head xs)
+    | x == last xs   = isZeePalindrome (take ((length xs) - 1) xs)
+    | otherwise      = False
 
---isZeePalindrome :: (x:xs) -> Bool
---isZeePalindrome (x:xs)
---    | null (tail xs) = (x == head xs)
---    | x == tail xs   = isZeePalindrome take(((length xs) - 1) xs)
---    | otherwise      = False
+testIsZeePalindrome = do
+    putStrLn "\nTesting isZeePalindrome..."
+    putStrLn (assertValue True (isZeePalindrome [1]))
+    putStrLn (assertValue False (isZeePalindrome [1, 2]))
+    putStrLn (assertValue False (isZeePalindrome [1, 2, 3]))
+    putStrLn (assertValue True (isZeePalindrome [1, 2, 1]))
+    putStrLn (assertValue True (isZeePalindrome [1, 2, 2, 1]))
+    putStrLn (assertValue True (isZeePalindrome [1, 2, 3, 2, 1]))
+    putStrLn (assertValue False (isZeePalindrome [1, 2, 3, 2, 2]))
 
 main = do
     testCoolCounter
     testMeanie
     testPalindromify
+    testIsZeePalindrome
